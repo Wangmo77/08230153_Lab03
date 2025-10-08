@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills | Leki Wangmo</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ===== SKILL DETAIL STYLING ===== */
+    .skill-details-section {
+      padding: 40px 20px;
+      min-height: 400px;
+    }
+
+    .skill-detail {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      align-items: flex-start;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 1000px;
+    }
+
+    .skill-image {
+      flex-shrink: 0;
+    }
+
+    .skill-image img {
+      width: 200px !important;
+      height: 130px !important;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .skill-text {
+      flex: 1;
+    }
+
+    .skill-text h2 {
+      color: #002366;
+      margin-bottom: 15px;
+      font-size: 1.6rem;
+    }
+
+    .skill-text p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .skill-text ul {
+      margin-bottom: 15px;
+      padding-left: 20px;
+    }
+
+    .skill-text li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .skill-text pre {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .skill-text code {
+      background: #e8f4f8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Dark theme support */
+    body.dark-mode .skill-detail {
+      background: rgba(40, 40, 40, 0.9);
+      color: #fff;
+    }
+
+    body.dark-mode .skill-text h2 {
+      color: #ffcc00;
+    }
+
+    body.dark-mode .skill-text p,
+    body.dark-mode .skill-text li {
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .skill-text pre {
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    body.dark-mode .skill-text code {
+      background: #404040;
+      color: #fff;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+      .skill-detail {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .skill-image img {
+        width: 180px !important;
+        height: 120px !important;
+      }
+    }
+
+    /* ===== CHECKERBOARD ENTER & DISSOLVE LEAVE ===== */
+
+    body {
+      position: relative;
+      opacity: 0;
+      animation: fadeInBody 0s forwards;
+    }
+
+    @keyframes fadeInBody {
+      to { opacity: 1; }
+    }
+
+    /* Checkerboard overlay */
+    .checkerboard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .checkerboard div {
+      background: #fff;
+      animation: reveal 1s forwards;
+    }
+
+    @keyframes reveal {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    /* Dissolve leave */
+    body.fade-out {
+      animation: dissolveExit 0.6s forwards ease-in-out;
+    }
+
+    @keyframes dissolveExit {
+      0% { opacity: 1; filter: blur(0); }
+      100% { opacity: 0; filter: blur(5px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html">
+          <img src="https://www.sce.edu.bt/wp-content/uploads/2025/05/SCE-LOGO-EDIT1.png" alt="Logo">
+        </a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="education.html">Education</a></li>
+        <li><a href="skills.html" class="active">Skills</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="section skills-grid">
+    <h1>My Skills</h1>
+    <div class="skills-container">
+      <button type="button" class="skill-card" data-skill="HTML">HTML</button>
+      <button type="button" class="skill-card" data-skill="CSS">CSS</button>
+      <button type="button" class="skill-card" data-skill="JavaScript">JavaScript</button>
+      <button type="button" class="skill-card" data-skill="Python">Python</button>
+    </div>
+  </section>
+
+  <!-- Skill details will appear in this section below -->
+  <section class="skill-details-section">
+    <div id="skillInfo" class="skill-info" style="display:none;"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Leki Wangmo | All Rights Reserved</p>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script>
+    // ===== Checkerboard Enter Effect =====
+    window.addEventListener('DOMContentLoaded', () => {
+      const checker = document.createElement('div');
+      checker.classList.add('checkerboard');
+      for (let i = 0; i < 60; i++) { // 10x6 grid
+        const square = document.createElement('div');
+        square.style.animationDelay = `${Math.random() * 0.5}s`;
+        checker.appendChild(square);
+      }
+      document.body.appendChild(checker);
+
+      // Remove checkerboard after animation ends
+      setTimeout(() => {
+        checker.remove();
+      }, 1200);
+    });
+
+    // ===== Dissolve Transition on Leave (for actual page navigations only) =====
+    document.querySelectorAll('a').forEach(link => {
+      // Ignore if it's not same-host link
+      if (link.hostname !== window.location.hostname) return;
+      // Ignore in-page anchors and JS-only links
+      if (link.getAttribute('href') === '#' || link.getAttribute('href') === '') return;
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = e.currentTarget.href;
+        document.body.classList.add('fade-out');
+        setTimeout(() => {
+          window.location.href = target;
+        }, 600);
+      });
+    });
+
+    // ===== Skill Cards: Show Info Inline =====
+    const info = document.getElementById('skillInfo');
+    const cards = document.querySelectorAll('.skill-card');
+    const skillContent = {
+      HTML: `
+        <div class="skill-detail">
+          <div class="skill-image">
+            <img src="images/html.jpg" alt="HTML" style="width: 300px; height: 200px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+          </div>
+          <div class="skill-text">
+            <h2>HTML (HyperText Markup Language)</h2>
+            <p>HTML is the standard markup language for creating web pages. It defines the structure of content using elements like <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;img&gt;</code>, and <code>&lt;a&gt;</code>.</p>
+            <ul>
+              <li><strong>Purpose</strong>: Structure content and semantics.</li>
+              <li><strong>Core</strong>: Elements, attributes, semantic tags, forms, media.</li>
+              <li><strong>Works with</strong>: CSS for styling and JavaScript for interactivity.</li>
+            </ul>
+            <p>Example:</p>
+            <pre><code>&lt;article&gt;
+  &lt;h1&gt;Welcome&lt;/h1&gt;
+  &lt;p&gt;This is a simple HTML page.&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+          </div>
+        </div>
+      `,
+      CSS: `
+        <div class="skill-detail">
+          <div class="skill-image">
+            <img src="images/css.jpg" alt="CSS" style="width: 300px; height: 200px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+          </div>
+          <div class="skill-text">
+            <h2>CSS (Cascading Style Sheets)</h2>
+            <p>CSS styles and lays out HTML content. It controls the visual appearance of web pages including colors, fonts, spacing, and layout.</p>
+            <ul>
+              <li><strong>Purpose</strong>: Visual styling and layout design.</li>
+              <li><strong>Core</strong>: Selectors, box model, flexbox, grid, responsive design.</li>
+              <li><strong>Features</strong>: Animations, transitions, media queries.</li>
+            </ul>
+          </div>
+        </div>
+      `,
+      JavaScript: `
+        <div class="skill-detail">
+          <div class="skill-image">
+            <img src="images/java.png" alt="JavaScript" style="width: 300px; height: 200px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+          </div>
+          <div class="skill-text">
+            <h2>JavaScript</h2>
+            <p>JavaScript adds interactivity to web pages. It's a versatile programming language that runs in browsers and servers.</p>
+            <ul>
+              <li><strong>Purpose</strong>: Dynamic content and user interactions.</li>
+              <li><strong>Core</strong>: DOM manipulation, events, fetch API, ES6 modules.</li>
+              <li><strong>Uses</strong>: Frontend frameworks, backend development, mobile apps.</li>
+            </ul>
+          </div>
+        </div>
+      `,
+      Python: `
+        <div class="skill-detail">
+          <div class="skill-image">
+            <img src="images/Python-.webp" alt="Python" style="width: 300px; height: 200px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+          </div>
+          <div class="skill-text">
+            <h2>Python</h2>
+            <p>Python is a versatile, high-level programming language known for its simplicity and readability.</p>
+            <ul>
+              <li><strong>Purpose</strong>: General-purpose programming and automation.</li>
+              <li><strong>Core</strong>: Data structures, functions, classes, modules.</li>
+              <li><strong>Uses</strong>: Web development, data analysis, AI/ML, automation.</li>
+            </ul>
+          </div>
+        </div>
+      `
+    };
+
+    cards.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-skill');
+        info.innerHTML = skillContent[key] || `<h2>${key}</h2><p>Details coming soon.</p>`;
+        info.style.display = 'block';
+        info.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>
